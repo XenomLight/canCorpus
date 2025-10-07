@@ -2,29 +2,23 @@ import LLM "mo:llm";
 import Array "mo:base/Array";
 import Text "mo:base/Text";
 
-// Simple customer-service knowledge corpus canister.
-// Admins can populate `systemMessages`. Users can query with `ask`.
 persistent actor {
 
-  // Stored system messages (admin-populated knowledge pieces)
-  var systemMessages : [Text] = [];
+  var systemMessages : [Text] = [
+    "Who or what are you? I Am canCorpus, an AI customer support helper.",
+    "What are you? I am an AI language model designed to assist with customer inquiries."
+  ];
 
-  public query func greet(name : Text) : async Text {
-    "Hello, " # name # "!";
-  };
-
-  // Admin: add a system knowledge entry. Returns true on success.
+// Admin functions
   public func addEntry(content : Text) : async Bool {
     systemMessages := Array.append(systemMessages, [content]);
     true;
   };
 
-  // Admin: list stored entries
   public query func listEntries() : async [Text] {
     systemMessages;
   };
 
-  // Admin: clear all stored entries
   public func clearEntries() : async Bool {
     systemMessages := [];
     true;
@@ -61,7 +55,7 @@ persistent actor {
       messages := Array.append(messages, [#user({ content = userPrompt })]);
 
       // send to LLM
-  // Build and send chat request. The llm README uses the enum tag form (#Llama3_1_8B)
+  // Build and send chat request. 
   let response = await LLM.chat(#Llama3_1_8B).withMessages(messages).send();
 
       switch (response.message.content) {

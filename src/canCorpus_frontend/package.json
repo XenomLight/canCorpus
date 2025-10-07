@@ -6,16 +6,18 @@
   "scripts": {
     "setup": "npm i && dfx canister create canCorpus_backend && dfx generate canCorpus_backend && dfx deploy",
     "start": "vite --port 3000",
-    "prebuild": "dfx generate",
-    "build": "tsc && vite build",
-    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
+    "prebuild": "npm i --include=dev && dfx generate",
+    "build": "vite build",
+    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\"",
+    "dev":"vite"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@dfinity/agent": "^3.0.0",
-    "@dfinity/candid": "^3.0.0",
-    "@dfinity/principal": "^3.0.0"
+    "@dfinity/agent": "2.4.1",
+    "@dfinity/candid": "2.4.1",
+  "@dfinity/auth-client": "2.4.1",
+    "@dfinity/principal": "2.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
