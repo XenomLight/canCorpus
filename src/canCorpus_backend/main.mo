@@ -38,6 +38,56 @@ persistent actor {
     true;
   };
 
+  public shared ({ caller }) func deleteEntry(index : Nat) : async Bool {
+    if (adminPrincipal != ?caller ) {
+      throw Error.reject("Unauthorized: Only admin can delete entries");
+    };
+
+    let len = systemMessages.size();
+    if (index >= len) {
+      return false;
+    };
+
+    var newArr : [Text] = [];
+    var i : Nat = 0;
+    while (i < len) {
+      if (i != index) {
+        // append existing entry
+        newArr := Array.append(newArr, [systemMessages[i]]);
+      };
+      i += 1;
+    };
+
+    systemMessages := newArr;
+    true;
+  };
+
+  public shared ({ caller }) func editEntry(index : Nat, content : Text) : async Bool {
+    if (adminPrincipal != ?caller ) {
+      throw Error.reject("Unauthorized: Only admin can edit entries");
+    };
+
+    let len = systemMessages.size();
+    if (index >= len) {
+      return false;
+    };
+
+    var newArr : [Text] = [];
+    var i : Nat = 0;
+    while (i < len) {
+      if (i == index) {
+        newArr := Array.append(newArr, [content]);
+      } else {
+        newArr := Array.append(newArr, [systemMessages[i]]);
+      };
+      i += 1;
+    };
+
+    systemMessages := newArr;
+    true;
+  };
+
+
   /// Public user query. This will chunk the stored system messages when there
   /// are too many to send at once. It asks the LLM for each chunk:
   /// "Do You have the answer for <question>? if yes answer and if not then say <apology>"

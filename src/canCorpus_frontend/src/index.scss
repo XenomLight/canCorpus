@@ -113,6 +113,21 @@ form {
   text-align: center;
 }
 
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  z-index: 9999;
+}
+.toast.info { background: linear-gradient(90deg,#4d89f7,#6a5cff); }
+.toast.success { background: linear-gradient(90deg,#32d296,#1fa0a0); }
+.toast.error { background: linear-gradient(90deg,#ff6b6b,#ff4d4d); }
+
 .btn {
   padding: 10px 20px;
   border-radius: 8px;
