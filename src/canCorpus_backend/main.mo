@@ -1,16 +1,27 @@
 import LLM "mo:llm";
 import Array "mo:base/Array";
+import Error "mo:base/Error";
 import Text "mo:base/Text";
+import Principal "mo:base/Principal";
 
 persistent actor {
 
+  var adminPrincipal :?Principal = null;
+
   var systemMessages : [Text] = [
-    "Who or what are you? I Am canCorpus, an AI customer support helper.",
-    "What are you? I am an AI language model designed to assist with customer inquiries."
+    "You are a customer support AI agent helper. Your name is canCorpus, designed to assist with customer inquiries."
   ];
 
 // Admin functions
-  public func addEntry(content : Text) : async Bool {
+  public shared({ caller }) func addEntry(content : Text) : async Bool {
+    //First-time login: assign caller as admin
+    if(adminPrincipal==null){
+      adminPrincipal:= ?caller;
+    };
+
+    if (adminPrincipal != ?caller ) {
+      throw Error.reject("Unauthorized: Only admin can add entries");
+    };
     systemMessages := Array.append(systemMessages, [content]);
     true;
   };
@@ -19,7 +30,10 @@ persistent actor {
     systemMessages;
   };
 
-  public func clearEntries() : async Bool {
+  public shared ({ caller }) func clearEntries() : async Bool {
+    if (adminPrincipal != ?caller ) {
+      throw Error.reject("Unauthorized: Only admin can add entries");
+    };
     systemMessages := [];
     true;
   };

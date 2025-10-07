@@ -89,7 +89,7 @@ function App() {
       setStatus('Entry added');
     } catch (err) {
       console.error(err);
-      setStatus('Failed to add entry');
+      setStatus(err.message);
     }
   }
 
