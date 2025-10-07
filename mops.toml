@@ -1,0 +1,3 @@
+[dependencies]
+base = "0.16.0"
+llm = "2.1.0"
