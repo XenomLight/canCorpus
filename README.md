@@ -44,25 +44,32 @@ canCorpus is a lightweight Internet Computer dapp that provides a simple custome
 - Node.js (16+) and npm or pnpm for the frontend. Verify with `node -v` and `npm -v`.
 - `mops` if you plan to manage Motoko dependencies locally (the project already includes `.mops`).
 - For local authentication testing, ensure the local Internet Identity canister is available (dfx handles this when the replica is running).
+- Ollama (Local)
+## Quick start (Local)
+### 1. Setting up Ollama
 
-## Quick start (Windows PowerShell)
+To be able to test the agent locally, you'll need a server for processing the agent's prompts. For that, we'll use `ollama`, which is a tool that can download and serve LLMs.
+See the documentation on the [Ollama website](https://ollama.com/) to install it. Once it's installed, run:
 
-### 1) Start the local replica and deploy canisters
+```
+ollama serve
+# Expected to start listening on port 11434
+```
 
-```powershell
-dfx start --background
+The above command will start the Ollama server, so that it can process requests by the agent. Additionally, and in a separate window, run the following command to download the LLM that will be used by the agent:
+
+```
+ollama run llama3.1:8b
+```
+
+The above command will download an 8B parameter model, which is around 4GiB. Once the command executes and the model is loaded, you can terminate it. You won't need to do this step again.
+
+### 2) Start the local replica and deploy canisters
+
+```
+dfx start --background --clean
 dfx deploy
 ```
-
-### 2) Start frontend
-
-```powershell
-cd src/canCorpus_frontend
-npm install
-npm run start
-```
-
-Open the frontend URL shown by Vite (default port 3000).
 
 ---
 
